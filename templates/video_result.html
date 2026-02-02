@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Video Detection Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background-attachment: fixed;
+            color: #333;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            max-width: 1200px;
+            margin: 0 auto;
+            animation: slideUp 0.8s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            font-size: 2.5rem;
+            font-weight: 700;
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .video-player {
+            text-align: center;
+            margin: 30px 0;
+            background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+            border-radius: 16px;
+            padding: 30px;
+            border: 2px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .video-player video {
+            max-width: 100%;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.2);
+        }
+
+        .summary {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 16px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .summary h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+
+        .summary p {
+            color: #666;
+            margin: 10px 0;
+            font-size: 1.1rem;
+        }
+
+        .frames-section {
+            margin: 40px 0;
+        }
+
+        .frames-title {
+            text-align: center;
+            color: #333;
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .frames-subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .frames-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .frame-item {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 255, 0.9));
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .frame-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+
+        .frame-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 15px;
+            font-weight: 600;
+            text-align: center;
+            font-size: 1rem;
+        }
+
+        .frame-images {
+            display: flex;
+            background: #f8f9fa;
+        }
+
+        .frame-image {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+        }
+
+        .frame-image img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .frame-label {
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: #666;
+            font-weight: 500;
+        }
+
+        .frame-detections {
+            padding: 15px;
+            background: white;
+        }
+
+        .detection-item {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1), rgba(69, 160, 73, 0.1));
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 8px;
+            border-left: 3px solid #4CAF50;
+            font-size: 0.9rem;
+        }
+
+        .drowning {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.1), rgba(211, 47, 47, 0.1));
+            border-left-color: #f44336;
+        }
+
+        .final-prediction {
+            background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+            border-radius: 20px;
+            padding: 40px;
+            margin: 40px 0;
+            border: 2px solid rgba(102, 126, 234, 0.3);
+            text-align: center;
+        }
+
+        .final-prediction h2 {
+            color: #667eea;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+        }
+
+        .prediction-result {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 20px 0;
+            padding: 20px;
+            border-radius: 16px;
+            display: inline-block;
+            min-width: 300px;
+        }
+
+        .drowning-result {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border: 2px solid #f44336;
+        }
+
+        .safe-result {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            border: 2px solid #4CAF50;
+        }
+
+        .confidence-text {
+            color: #666;
+            font-size: 1.2rem;
+            margin: 15px 0;
+        }
+
+        .alert-box {
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+            font-weight: 600;
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border: 1px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            border: 1px solid rgba(76, 175, 80, 0.3);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 16px 40px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1.1rem;
+            font-weight: 600;
+            margin: 30px auto;
+            display: block;
+            text-align: center;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            h1 {
+                font-size: 2rem;
+            }
+
+            .frames-container {
+                grid-template-columns: 1fr;
+            }
+
+            .frame-images {
+                flex-direction: column;
+            }
+
+            .prediction-result {
+                font-size: 2rem;
+                min-width: 250px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎥 Video Detection Results</h1>
+
+        <div class="video-player">
+            <video controls>
+                <source src="/uploads/{{ video_filename }}" type="video/mp4">
+                Your browser does not support the video tag.
+            </video>
+        </div>
+
+        <div class="summary">
+            <h2>Analysis Summary</h2>
+            <p><strong>Frames Analyzed:</strong> {{ summary.total_frames_analyzed }}</p>
+            <p><strong>Frames with Drowning Detected:</strong> {{ summary.drowning_frames }}</p>
+            {% if summary.frame_limit_reached %}
+                <p style="color: #ff9800;"><em>Note: Analysis limited to first 50 frames for performance</em></p>
+            {% endif %}
+        </div>
+
+        {% if processed_frames %}
+            <div class="frames-section">
+                <h2 class="frames-title">Sample Frame Analysis</h2>
+                <p class="frames-subtitle">Showing {{ processed_frames|length }} representative frames from the video analysis</p>
+
+                <div class="frames-container">
+                    {% for frame in processed_frames %}
+                    <div class="frame-item">
+                        <div class="frame-header">
+                            Frame {{ frame.frame_number }}
+                        </div>
+                        <div class="frame-images">
+                            <div class="frame-image">
+                                <img src="/frames/{{ summary.video_id }}/{{ frame.original_frame }}" alt="Original Frame">
+                                <div class="frame-label">Original</div>
+                            </div>
+                            <div class="frame-image">
+                                <img src="/results/{{ frame.result_frame }}" alt="Detection Result">
+                                <div class="frame-label">Analysis</div>
+                            </div>
+                        </div>
+                        <div class="frame-detections">
+                            {% if frame.detections %}
+                                {% for detection in frame.detections %}
+                                <div class="detection-item {% if detection.class == 'Drowning' %}drowning{% endif %}">
+                                    <strong>{{ detection.class }}</strong> - Confidence: {{ "%.2f"|format(detection.confidence * 100) }}%
+                                </div>
+                                {% endfor %}
+                            {% else %}
+                                <div class="detection-item">
+                                    No detections in this frame
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endif %}
+
+        <!-- Final Prediction Section -->
+        <div class="final-prediction">
+            <h2>🎯 Final Prediction</h2>
+            <div class="prediction-result {% if summary.final_prediction == 'DROWNING DETECTED' %}drowning-result{% else %}safe-result{% endif %}">
+                {{ summary.final_prediction }}
+            </div>
+            <div class="confidence-text">
+                Confidence: {{ "%.1f"|format(summary.confidence_level) }}%
+            </div>
+            {% if summary.final_prediction == 'DROWNING DETECTED' %}
+                <div class="alert-box alert-danger">
+                    ⚠️ <strong>ALERT:</strong> Drowning behavior detected in the video. Immediate attention required!
+                </div>
+            {% else %}
+                <div class="alert-box alert-success">
+                    ✅ <strong>SAFE:</strong> No drowning behavior detected in the analyzed frames.
+                </div>
+            {% endif %}
+        </div>
+
+        <a href="/" class="back-btn">📁 Upload Another File</a>
+    </div>
+</body>
+</html>

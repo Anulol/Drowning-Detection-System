@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Image Detection Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            color: #333;
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Hero Header */
+        .hero-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 60px 20px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="75" cy="75" r="1" fill="%23ffffff" opacity="0.1"/><circle cx="50" cy="10" r="0.5" fill="%23ffffff" opacity="0.1"/><circle cx="10" cy="50" r="0.5" fill="%23ffffff" opacity="0.1"/><circle cx="90" cy="30" r="0.5" fill="%23ffffff" opacity="0.1"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+            pointer-events: none;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-icon {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            background: linear-gradient(45deg, #ffffff, #e8f2ff);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .hero-subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.2rem;
+            margin-bottom: 30px;
+        }
+
+        /* Main Content */
+        .main-content {
+            padding: 60px 20px;
+            background: #ffffff;
+        }
+
+        .content-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Images Comparison Section */
+        .images-section {
+            margin-bottom: 60px;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            color: #666;
+            font-size: 1.1rem;
+            margin-bottom: 40px;
+        }
+
+        .images-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            margin: 40px 0;
+        }
+
+        .image-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.9), rgba(248, 249, 255, 0.9));
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .image-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.15);
+        }
+
+        .image-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .image-content {
+            padding: 20px;
+            text-align: center;
+        }
+
+        .image-content img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Results Section */
+        .results-section {
+            margin-bottom: 60px;
+        }
+
+        .results-card {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.95), rgba(248, 249, 255, 0.95));
+            backdrop-filter: blur(20px);
+            border-radius: 24px;
+            padding: 50px;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+
+        .result-status {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin: 30px 0;
+            padding: 30px;
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 400px;
+            animation: fadeInScale 0.8s ease-out;
+        }
+
+        @keyframes fadeInScale {
+            from {
+                opacity: 0;
+                transform: scale(0.9);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .status-safe {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            border: 3px solid #4CAF50;
+        }
+
+        .status-danger {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border: 3px solid #f44336;
+        }
+
+        .result-summary {
+            color: #666;
+            font-size: 1.2rem;
+            margin: 20px 0;
+        }
+
+        .alert-box {
+            padding: 25px;
+            border-radius: 16px;
+            margin: 30px 0;
+            font-weight: 600;
+            font-size: 1.1rem;
+            animation: slideIn 0.6s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-danger {
+            background: linear-gradient(135deg, #ffebee, #ffcdd2);
+            color: #c62828;
+            border: 2px solid rgba(244, 67, 54, 0.3);
+        }
+
+        .alert-success {
+            background: linear-gradient(135deg, #e8f5e8, #c8e6c9);
+            color: #2e7d32;
+            border: 2px solid rgba(76, 175, 80, 0.3);
+        }
+
+        /* Detections Section */
+        .detections-section {
+            margin-bottom: 60px;
+        }
+
+        .detections-title {
+            text-align: center;
+            font-size: 1.8rem;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .detections-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .detection-item {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.05), rgba(118, 75, 162, 0.05));
+            padding: 20px;
+            border-radius: 16px;
+            border-left: 4px solid #4CAF50;
+            transition: all 0.3s ease;
+        }
+
+        .detection-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.1);
+        }
+
+        .detection-item.drowning {
+            background: linear-gradient(135deg, rgba(244, 67, 54, 0.05), rgba(211, 47, 47, 0.05));
+            border-left-color: #f44336;
+        }
+
+        .detection-class {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .detection-confidence {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Back Button */
+        .back-section {
+            text-align: center;
+            padding: 60px 20px;
+            background: linear-gradient(135deg, #f8f9ff, #e8f2ff);
+        }
+
+        .back-btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 18px 50px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-size: 1.2rem;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+
+        .back-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.4);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 2rem;
+            }
+
+            .images-comparison {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+
+            .results-card {
+                padding: 30px 20px;
+            }
+
+            .result-status {
+                font-size: 2rem;
+                min-width: 300px;
+            }
+
+            .detections-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .image-card {
+                margin: 0 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .hero-header {
+                padding: 40px 20px;
+            }
+
+            .hero-title {
+                font-size: 1.8rem;
+            }
+
+            .result-status {
+                font-size: 1.5rem;
+                min-width: 250px;
+            }
+
+            .results-card {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Hero Header -->
+    <header class="hero-header">
+        <div class="hero-content">
+            <div class="hero-icon">🔍</div>
+            <h1 class="hero-title">Image Detection Results</h1>
+            <p class="hero-subtitle">AI-powered analysis completed successfully</p>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="content-container">
+            <!-- Images Comparison Section -->
+            <section class="images-section">
+                <h2 class="section-title">Image Analysis</h2>
+                <p class="section-subtitle">Compare the original image with AI detection results</p>
+
+                <div class="images-comparison">
+                    <div class="image-card">
+                        <div class="image-header">📷 Original Image</div>
+                        <div class="image-content">
+                            <img src="/uploads/{{ original_image }}" alt="Original Image">
+                        </div>
+                    </div>
+
+                    <div class="image-card">
+                        <div class="image-header">🎯 Detection Results</div>
+                        <div class="image-content">
+                            <img src="/results/{{ result_image }}" alt="Detection Result">
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Results Section -->
+            <section class="results-section">
+                <div class="results-card">
+                    {% set drowning_count = detections | selectattr('class', 'equalto', 'Drowning') | list | length %}
+                    {% if drowning_count > 0 %}
+                        <div class="result-status status-danger">
+                            🚨 DROWNING DETECTED
+                        </div>
+                        <div class="result-summary">
+                            {{ drowning_count }} drowning incident{{ 's' if drowning_count > 1 else '' }} detected
+                        </div>
+                        <div class="alert-box alert-danger">
+                            ⚠️ <strong>CRITICAL ALERT:</strong> Drowning behavior detected in the image. Immediate attention required!
+                        </div>
+                    {% else %}
+                        <div class="result-status status-safe">
+                            ✅ NO DROWNING DETECTED
+                        </div>
+                        <div class="result-summary">
+                            Image analysis completed - no drowning incidents found
+                        </div>
+                        <div class="alert-box alert-success">
+                            ✓ <strong>SAFE:</strong> No drowning behavior detected in the analyzed image.
+                        </div>
+                    {% endif %}
+                </div>
+            </section>
+
+            <!-- Detections Section -->
+            {% if detections %}
+            <section class="detections-section">
+                <h3 class="detections-title">Detection Details</h3>
+                <div class="detections-grid">
+                    {% for detection in detections %}
+                    <div class="detection-item {% if detection.class == 'Drowning' %}drowning{% endif %}">
+                        <div class="detection-class">{{ detection.class }}</div>
+                        <div class="detection-confidence">Confidence: {{ "%.1f"|format(detection.confidence * 100) }}%</div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+            {% endif %}
+        </div>
+    </main>
+
+    <!-- Back Button Section -->
+    <section class="back-section">
+        <a href="/" class="back-btn">📁 Analyze Another Image</a>
+    </section>
+</body>
+</html>
