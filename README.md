@@ -1,4 +1,5 @@
 # Automated Drowning Detection
+https://drowning-detection-system.onrender.com 
 
 This repository presents a comprehensive solution for automated drowning detection leveraging deep learning models and advanced methodologies. Our work focuses on revolutionizing drowning incident response systems by swiftly identifying distress situations in aquatic environments.
 
@@ -57,3 +58,4 @@ Here are some sample detection results from our YOLOv8 model:
 
 ## Usage
 Detailed instructions and code implementation for automated drowning detection are provided in this repo.
+https://drowning-detection-system.onrender.com
