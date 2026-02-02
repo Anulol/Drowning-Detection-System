@@ -26,5 +26,34 @@ Our approach involved rigorous model refinement to achieve accurate drowning det
 ![WhatsApp Image 2023-12-10 at 12 38 25 PM (1)](https://github.com/Hasibwajid/Automated-Drowning-Detection-YOLOV8/assets/72168225/1796c6c3-e36c-4866-8a0e-97053717981e)
 ![WhatsApp Image 2023-12-10 at 12 37 08 PM](https://github.com/Hasibwajid/Automated-Drowning-Detection-YOLOV8/assets/72168225/2c4c93ac-497e-497d-bbec-58fda3de8b8c)
 
+### Additional Detection Results
+Here are some sample detection results from our YOLOv8 model:
+
+**Detection Result 1:**
+![Detection Result 1](results/result_02173e7ac58a42baab209aba7f7c7846.jpg)
+
+**Detection Result 2:**
+![Detection Result 2](results/result_0392cb0c388648ce93a96d2e7f4e5395.jpg)
+
+**Detection Result 3:**
+![Detection Result 3](results/result_046cf6879c7b45c9a13afa3e8c96fafe.jpg)
+
+**Detection Result 4:**
+![Detection Result 4](results/result_048ad909e4b84c649ae07ceab4daa2ea.jpg)
+
+## Web Application Screenshots
+
+### Homepage Interface
+![Web App Homepage](https://via.placeholder.com/800x600/4facfe/ffffff?text=Drowning+Detection+Web+App)
+*Modern web interface with gradient background, drag-and-drop upload functionality, and intuitive navigation.*
+
+### Detection Results Page
+![Results Interface](https://via.placeholder.com/800x600/43e97b/ffffff?text=AI+Detection+Results)
+*Results page showing original image, processed image with bounding boxes, confidence scores, and detailed analysis.*
+
+### Video Analysis Interface
+![Video Analysis](https://via.placeholder.com/800x600/f093fb/ffffff?text=Video+Drowning+Analysis)
+*Video analysis interface displaying sample frames, final prediction verdict (DROWNING DETECTED/NOT DETECTED), and comprehensive report.*
+
 ## Usage
 Detailed instructions and code implementation for automated drowning detection are provided in this repo.

@@ -36,6 +36,32 @@ A web application for detecting drowning incidents in images and videos using YO
 4. For images: View the detection results with highlighted areas
 5. For videos: View sample frame analysis and **final prediction verdict** (DROWNING DETECTED / NO DROWNING DETECTED)
 
+## Screenshots
+
+### Homepage
+The modern web interface with gradient background and intuitive upload form.
+
+![Homepage Interface](https://via.placeholder.com/800x600/4facfe/ffffff?text=Drowning+Detection+Homepage)
+*Modern homepage with gradient background, upload form for images and videos, and feature highlights.*
+
+### Detection Results
+Sample detection results showing the AI model's performance:
+
+![Detection Result 1](results/result_02173e7ac58a42baab209aba7f7c7846.jpg)
+![Detection Result 2](results/result_0392cb0c388648ce93a96d2e7f4e5395.jpg)
+![Detection Result 3](results/result_046cf6879c7b45c9a13afa3e8c96fafe.jpg)
+![Detection Result 4](results/result_048ad909e4b84c649ae07ceab4daa2ea.jpg)
+
+*These images demonstrate the drowning detection system's ability to identify and highlight potential drowning incidents with bounding boxes and confidence scores.*
+
+### Results Page Interface
+![Results Page](https://via.placeholder.com/800x600/43e97b/ffffff?text=Detection+Results+Page)
+*Results page showing image comparison, detection details, and confidence scores.*
+
+### Video Analysis Interface
+![Video Results](https://via.placeholder.com/800x600/f093fb/ffffff?text=Video+Analysis+Results)
+*Video analysis page displaying sample frames, final prediction verdict, and comprehensive analysis.*
+
 ## Supported Formats
 
 - **Images:** JPG, PNG
