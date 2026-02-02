@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: drowning-detection
+    runtime: python3
+    buildCommand: pip install -r requirements.txt
+    startCommand: python app.py
+    envVars:
+      - key: PORT
+        value: 10000
